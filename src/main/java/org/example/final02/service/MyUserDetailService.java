@@ -20,8 +20,8 @@ public class MyUserDetailService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<MyUser> user = repository.findByUsername(username);
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        Optional<MyUser> user = repository.findByLoginName(userName);
         if (user.isPresent()) {
             var userObj = user.get();
             return User.builder()
@@ -30,7 +30,7 @@ public class MyUserDetailService implements UserDetailsService {
                     .roles(String.valueOf(userObj.getRole()))
                     .build();
         }else {
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException(userName);
         }
     }
 }
