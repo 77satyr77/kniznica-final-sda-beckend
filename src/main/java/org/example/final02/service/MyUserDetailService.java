@@ -15,22 +15,23 @@ public class MyUserDetailService implements UserDetailsService {
 
     private final MyUserRepository repository;
 
-    public MyUserDetailService(MyUserRepository myUserRepository) {
-        this.repository = myUserRepository;
+    public MyUserDetailService(MyUserRepository repository) {
+        this.repository = repository;
     }
 
+
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        Optional<MyUser> user = repository.findByLoginName(userName);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<MyUser> user = repository.findByUsername(username);
         if (user.isPresent()) {
             var userObj = user.get();
             return User.builder()
-                    .username(userObj.getLoginName())
+                    .username(userObj.getUsername())
                     .password(userObj.getPassword())
                     .roles(String.valueOf(userObj.getRole()))
                     .build();
-        }else {
-            throw new UsernameNotFoundException(userName);
+        } else {
+            throw new UsernameNotFoundException(username);
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.example.final02.config;
 import org.example.final02.service.MyUserDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,22 +19,21 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    private final MyUserDetailService userDetailService;
+    @Autowired
+    private  MyUserDetailService myUserDetailService;
 
-    public SecurityConfiguration(MyUserDetailService userDetailService) {
-        this.userDetailService = userDetailService;
-    }
+
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry->{
-                    //nastavujeme prava pristupu k stranka
-                    //home pristupna pre vsetkych ---permitAll
-                    registry.requestMatchers("/home" , "/register/user").permitAll();
-                    registry.requestMatchers("/admin/**").hasRole("ADMIN");
-                    registry.requestMatchers("/user/**").hasRole("USER");
+                    registry.requestMatchers("/home" , "/register/**").permitAll();
+                    registry.requestMatchers("/superAdmin/**").hasRole("SUPER_ADMIN");
+                    registry.requestMatchers("/admin/**" ).hasAnyRole("ADMIN" , "SUPER_ADMIN");
+                    registry.requestMatchers("/user/**").hasAnyRole("USER" , "ADMIN" , "SUPER_ADMIN");
                     registry.anyRequest().authenticated();
         })
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
@@ -43,13 +43,13 @@ public class SecurityConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return userDetailService;
+        return myUserDetailService;
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setUserDetailsService(myUserDetailService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
