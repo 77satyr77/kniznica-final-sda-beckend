@@ -1,9 +1,10 @@
 package org.example.final02.config;
 import org.example.final02.service.MyUserDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,10 +20,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    @Autowired
-    private  MyUserDetailService myUserDetailService;
 
+    private final   MyUserDetailService myUserDetailService;
 
+    public SecurityConfiguration(MyUserDetailService myUserDetailService) {
+        this.myUserDetailService = myUserDetailService;
+    }
 
 
     @Bean
@@ -30,7 +33,7 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry->{
-                    registry.requestMatchers("/home" , "/register/**").permitAll();
+                    registry.requestMatchers("/home" , "/register/**" , "/authenticate").permitAll();
                     registry.requestMatchers("/superAdmin/**").hasRole("SUPER_ADMIN");
                     registry.requestMatchers("/admin/**" ).hasAnyRole("ADMIN" , "SUPER_ADMIN");
                     registry.requestMatchers("/user/**").hasAnyRole("USER" , "ADMIN" , "SUPER_ADMIN");
@@ -52,6 +55,12 @@ public class SecurityConfiguration {
         authProvider.setUserDetailsService(myUserDetailService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
+    }
+
+    //Overovatel pre AuthenticationManager
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        return new ProviderManager(authenticationProvider());
     }
 
     @Bean
