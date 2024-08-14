@@ -18,7 +18,7 @@ public class SuperAdminController {
         this.myUserRepository = myUserRepository;
     }
 
-   /* @PostMapping("/superAdmin/changeRole")
+    @PostMapping("/superAdmin/changeRole")
     public String changeRole(@RequestParam String username, @RequestParam UserRole role) {
         Optional<MyUser> optionalMyUser = myUserRepository.findByUsername(username);
 
@@ -28,5 +28,5 @@ public class SuperAdminController {
             myUserRepository.save(myUser);
         }
         return "redirect:/superAdmin";
-    }*/
+    }
 }
