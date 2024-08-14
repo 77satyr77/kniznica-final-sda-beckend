@@ -1,4 +1,5 @@
 package org.example.final02.config;
+import org.example.final02.jwt.JwtAuthenticationFilter;
 import org.example.final02.service.MyUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
@@ -22,9 +24,11 @@ public class SecurityConfiguration {
 
 
     private final   MyUserDetailService myUserDetailService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfiguration(MyUserDetailService myUserDetailService) {
+    public SecurityConfiguration(MyUserDetailService myUserDetailService, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.myUserDetailService = myUserDetailService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
 
@@ -40,6 +44,7 @@ public class SecurityConfiguration {
                     registry.anyRequest().authenticated();
         })
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

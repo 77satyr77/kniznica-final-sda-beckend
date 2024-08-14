@@ -43,11 +43,21 @@ public class JwtService {
     }
 
     public String extractUsrname(String jwt) {
+        Claims claims = getClaims(jwt);
+        return claims.getSubject();
+    }
+
+    private Claims getClaims(String jwt) {
         Claims claims = Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(jwt)
                 .getPayload();
-        return claims.getSubject();
+        return claims;
+    }
+
+    public boolean isTokenValid(String jwt) {
+        Claims claims = getClaims(jwt);
+        return claims.getExpiration().after(Date.from(Instant.now()));
     }
 }
