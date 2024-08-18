@@ -9,14 +9,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MyUser {
-
+public class Books {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String username;
-    private String password;
+    private long idBook;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole role= UserRole.USER;
+    private String title;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Authors authors;
+
+    private boolean isAvailable;
 }
