@@ -5,6 +5,7 @@ import org.example.final02.model.entity.Author;
 import org.example.final02.model.entity.Book;
 import org.example.final02.model.entity.dto.AuthorDTO;
 import org.example.final02.model.entity.dto.BookDTO;
+import org.example.final02.model.entity.dto.MyCustomMapper;
 import org.example.final02.service.LibraryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,9 @@ public class LibraryController {
      * @return ResponseEntity containing the created Book entity.
      */
     @PostMapping("/books")
-    public ResponseEntity<Book> createBook(@RequestBody BookDTO bookDTO) {
+    public ResponseEntity<BookDTO> createBook(@RequestBody BookDTO bookDTO) {
         Book createdBook = libraryService.createBook(bookDTO);
-        return new ResponseEntity<>(createdBook, HttpStatus.CREATED);
+        return new ResponseEntity<>(MyCustomMapper.toBookDTO(createdBook), HttpStatus.CREATED);
     }
 
     /**
@@ -48,9 +49,9 @@ public class LibraryController {
      * @return ResponseEntity containing the created Author entity.
      */
     @PostMapping("/authors")
-    public ResponseEntity<Author> createAuthor(@RequestBody AuthorDTO authorDTO) {
+    public ResponseEntity<AuthorDTO> createAuthor(@RequestBody AuthorDTO authorDTO) {
         Author createdAuthor = libraryService.createAuthor(authorDTO);
-        return new ResponseEntity<>(createdAuthor, HttpStatus.CREATED);
+        return new ResponseEntity<>(MyCustomMapper.toAuthorDTO(createdAuthor), HttpStatus.CREATED);
     }
 
     /**
