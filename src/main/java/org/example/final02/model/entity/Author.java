@@ -5,18 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MyUsers {
+public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String username;
-    private String password;
+    private Long idAuthor;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole role= UserRole.USER;
+    private String firstNameAuthor;
+    private String lastNameAuthor;
+
+    @OneToMany(mappedBy = "author")
+    private List<Book> books;
 }

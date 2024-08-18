@@ -1,6 +1,6 @@
 package org.example.final02.controller;
 
-import org.example.final02.model.entity.MyUsers;
+import org.example.final02.model.entity.MyUser;
 import org.example.final02.repository.MyUserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +24,12 @@ public class UserRegisterController {
 
 
     @PostMapping("/register/user")
-    public ResponseEntity<String> register(@RequestBody MyUsers myUsers) {
-        if (myUserRepository.findByUsername(myUsers.getUsername()).isPresent()) {
+    public ResponseEntity<String> register(@RequestBody MyUser myUser) {
+        if (myUserRepository.findByUsername(myUser.getUsername()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Užívateľ s týmto menom už existuje");
         }
-        myUsers.setPassword(passwordEncoder.encode(myUsers.getPassword()));
-        MyUsers savedUser = myUserRepository.save(myUsers);
+        myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
+        MyUser savedUser = myUserRepository.save(myUser);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Užívateľ úspešne zaregistrovaný" +  savedUser);
     }

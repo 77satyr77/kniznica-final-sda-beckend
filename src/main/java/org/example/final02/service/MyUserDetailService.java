@@ -1,6 +1,6 @@
 package org.example.final02.service;
 
-import org.example.final02.model.entity.MyUsers;
+import org.example.final02.model.entity.MyUser;
 import org.example.final02.repository.MyUserRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +22,7 @@ public class MyUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<MyUsers> user = repository.findByUsername(username);
+        Optional<MyUser> user = repository.findByUsername(username);
         if (user.isPresent()) {
             var userObj = user.get();
             return User.builder()

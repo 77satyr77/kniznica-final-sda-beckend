@@ -1,6 +1,6 @@
 package org.example.final02.controller;
 
-import org.example.final02.model.entity.MyUsers;
+import org.example.final02.model.entity.MyUser;
 import org.example.final02.repository.MyUserRepository;
 import org.example.final02.service.MyUserDetailService;
 import org.example.final02.webtoken.JwtService;
@@ -51,7 +51,7 @@ public class ContentController {
 
     @GetMapping("/superAdmin/home")
     public String handleSuperAdminHome(Model model) {
-        List<MyUsers> users = myUserRepository.findAll();
+        List<MyUser> users = myUserRepository.findAll();
         model.addAttribute("users", users);
         return "/pages/superAdmin_home";
     }
