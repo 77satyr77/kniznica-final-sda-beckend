@@ -28,7 +28,7 @@ public class LibraryServiceImplementation implements LibraryService {
         Book book = MyCustomMapper.toBook(bookDTO, author);
 
         Book savedBook = bookRepository.save(book);
-        log.info("Book created: {}", savedBook);
+        log.info("Book created: {}", MyCustomMapper.toBookDTO(savedBook));
 
         return savedBook;
     }
@@ -48,13 +48,12 @@ public class LibraryServiceImplementation implements LibraryService {
         Author author = MyCustomMapper.toAuthor(authorDTO);
 
         Author savedAuthor = authorRepository.save(author);
-        log.info("Author created: {}", savedAuthor);
+        log.info("Author created: {}", MyCustomMapper.toAuthorDTO(savedAuthor));
 
         return savedAuthor;
     }
 
     @Override
-    @Transactional
     public void deleteAuthor(Long authorId) {
         if (!authorRepository.existsById(authorId)) {
             throw new IllegalArgumentException("Author not found with ID: " + authorId);
