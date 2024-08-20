@@ -3,11 +3,15 @@ package org.example.final02.controller;
 import org.example.final02.model.entity.MyUser;
 import org.example.final02.repository.MyUserRepository;
 import org.example.final02.service.MyUserDetailService;
+import org.example.final02.webtoken.AuthResponse;
 import org.example.final02.webtoken.JwtService;
 import org.example.final02.webtoken.LoginForm;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,6 +60,7 @@ public class ContentController {
         return "/pages/superAdmin_home";
     }
 
+
     @PostMapping("/authenticate")
     public String authenticateAndGetToken(@RequestBody LoginForm loginForm) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -67,4 +72,5 @@ public class ContentController {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
     }
+
 }
