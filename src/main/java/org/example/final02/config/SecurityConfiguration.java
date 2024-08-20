@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(registry->{
                     registry.requestMatchers("/home" , "/register/**" , "/authenticate").permitAll();
                     registry.requestMatchers("/superAdmin/**").hasRole("SUPER_ADMIN");
-                    registry.requestMatchers("/admin/**" ).hasAnyRole("ADMIN" , "SUPER_ADMIN");
+                    registry.requestMatchers("/admin/**" , "/api/library/**").hasAnyRole("ADMIN" , "SUPER_ADMIN");
                     registry.requestMatchers("/user/**").hasAnyRole("USER" , "ADMIN" , "SUPER_ADMIN");
                     registry.anyRequest().authenticated();
         })
